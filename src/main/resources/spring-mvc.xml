@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
 
-    <bean id="viewResolver" class="spring.springmvc.ViewResolver">
+    <!--视图解析器 controll method返回的ModelAndView-->
+    <bean id="viewResolver" class="ssm.springmvc.ViewResolver">
         <property name="prefix" value="/WEB-INF/views/"></property>
         <property name="suffix" value=".jsp"></property>
     </bean>

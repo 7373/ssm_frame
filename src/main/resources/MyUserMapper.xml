@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mapper namespace="spring.demo.repository.UserMapper">
+<mapper namespace="ssm.demo.repository.UserMapper">
 
-    <select id="queryUser" resultType="spring.dataObject.User">
+    <select id="queryUser" resultType="ssm.demo.entity.User">
         select * from login_user where username = #{username} AND password = #{password}
     </select>
 

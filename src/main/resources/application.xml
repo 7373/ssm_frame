@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
 
-    <bean id="hostess" class="spring.Person">
+
+    <!--注入一个POJO-->
+    <bean id="hostess" class="ssm.Person">
         <property name ="userName" value = "admin"></property>
         <property name ="passWord" value = "admin"></property>
     </bean>
 
-    <bean class="spring.mybatis.JDBCUtils" id="dataSource">
+    <!--这里考虑使用连接池管理数据源-->
+    <bean class="ssm.mybatis.JDBCUtils" id="dataSource">
         <property name="user" value="root"></property>
         <property name="password" value=""></property>
         <property name="driver" value="com.mysql.jdbc.Driver"></property>
         <property name="url" value="jdbc:mysql://localhost:3306/test"></property>
     </bean>
 
-    <component-scan base-package="spring.demo" >
+
+    <!--扫描包注解-->
+    <component-scan base-package="ssm.demo" >
     </component-scan>
 
 
