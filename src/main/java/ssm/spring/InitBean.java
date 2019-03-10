@@ -56,6 +56,11 @@ public class InitBean extends BeanDefinition {
             } catch (ClassNotFoundException e) {
                 log.error("xml中{}无法实例化", className);
             }
+            /**
+             * key->className ,value->object Bean
+             * aClass.cast(applicationContext.getBean(beanId))  类型转换（反射依赖注入）
+             * @when
+             */
             beanContainerMap.put(className, aClass.cast(applicationContext.getBean(beanId)));
         }
     }

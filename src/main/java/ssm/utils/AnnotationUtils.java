@@ -8,7 +8,7 @@ public class  AnnotationUtils {
 
     public  static <T>  boolean isEmpty(T t){
 
-        return  t == null ? true : false;
+        return  t == null ;
 
     }
 

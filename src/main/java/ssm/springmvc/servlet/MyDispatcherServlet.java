@@ -37,18 +37,27 @@ public class MyDispatcherServlet extends HttpServlet {
     public void init() {
         InitBean initBean = new InitBean();
         initBean.initBeans();
+        /**
+         * bean容器
+         * @when
+         */
+        Map<String, Object> beanContainerMap=initBean.beanContainerMap;
         //根据bean容器中注册的bean获得HandlerMapping
         /*url-method*/
         /*通过注解的bean 找到controll 在找requestMapping注解 -》绑定url-method*/
-        Map<String, Method> bindingRequestMapping = Handler.bindingRequestMapping(initBean.beanContainerMap);
+        Map<String, Method> requestMapping = Handler.bindingRequestMapping(beanContainerMap);
 //        bindingRequestMapping.forEach((key,value)->{
 //
 //        });
+        /**
+         * 放入 ServletContext
+         * @when
+         */
         ServletContext servletContext = this.getServletContext();
-        /*bean Map*/
-        servletContext.setAttribute("beanContainerMap", initBean.beanContainerMap);
+        /*bean Map 容器*/
+        servletContext.setAttribute("beanContainerMap", beanContainerMap);
         /*handlerMapping HandlerMapping处理器映射器*/
-        servletContext.setAttribute("bindingRequestMapping", bindingRequestMapping);
+        servletContext.setAttribute("requestMapping", requestMapping);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -65,20 +74,29 @@ public class MyDispatcherServlet extends HttpServlet {
 
     }
     //接收到请求后转发到相应的方法上
+    /**
+     * 处理请求方法：POST或者GET
+     *
+     * @param
+     * @return
+     * @author  2019/3/2 14:56
+     */
     private void doDispatch(HttpServletRequest request, HttpServletResponse response) throws IOException, InvocationTargetException, IllegalAccessException, InstantiationException {
+        /**
+         * ServletContext
+         * @when
+         */
         ServletContext servletContext = this.getServletContext();
         //获取扫描controller注解后url和方法绑定的mapping，也就是handlerMapping
-        Map<String, Method> bindingRequestMapping =
-                (Map<String, Method>) servletContext.getAttribute("bindingRequestMapping");
+        Map<String, Method> requestMapping = (Map<String, Method>) servletContext.getAttribute("requestMapping");
         //获取实例化的bean容器
         Map<String, Object> beanContainerMap = (Map<String, Object>) servletContext.getAttribute("beanContainerMap");
         String url = request.getServletPath();
-        Set<Map.Entry<String, Method>> entries = bindingRequestMapping.entrySet();
+        Set<Map.Entry<String, Method>> entries = requestMapping.entrySet();
         /*获取请求的参数*/
-        List<Object> resultParameters = Binding.bingdingMethodParamters(bindingRequestMapping, request);
+        List<Object> resultParameters = Binding.bingdingMethodParamters(requestMapping, request);
         /*遍历handlerMapping*/
-        for (Map.Entry<String, Method> entry :
-                entries) {
+        for (Map.Entry<String, Method> entry : entries) {
             if (url.equals(entry.getKey())) {
                 /*根据url找到具体的method 也就是handler:源码是用HandlerAdapter处理器适配器。 HandlerAdapter经过适配调用具体的处理器(Controller，也叫后端控制器)。*/
                 Method method = entry.getValue();

@@ -38,7 +38,7 @@ public class BindingByMyModelAttribute implements   BindingParamter {
         for (Field field :
                 fields) {
             String parameter1 = request.getParameter(field.getName());
-            if (!StringUtils.isEmpty(parameter1)){
+            if (StringUtils.isNotBlank(parameter1)){
                 Object setObject = ConvertUtis.convert(field.getType().getSimpleName(),parameter1);
                 String methodName = GetMethodName.getSetMethodNameByField(field.getName());
                 Method method = aClass.getMethod(methodName, field.getType());
@@ -52,8 +52,6 @@ public class BindingByMyModelAttribute implements   BindingParamter {
 
             }
         }
-
-
         return object;
 
     }

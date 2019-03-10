@@ -22,6 +22,7 @@ import ssm.xml.FileSystemXmlApplicationContext;
 import ssm.xmlRules.IocRules;
 
 /**
+ * 反射依赖注入
  * Created by Yien on 2018/12/21.
  * 上下文获取的方法
  */
@@ -36,7 +37,7 @@ public class ApplicationContext extends FileSystemXmlApplicationContext implemen
     }
 
     /**
-     * 获取bean的方法
+     * 获取bean的方法：反射生成对象-》依赖注入
      * @param beanId
      * @return
      */
@@ -47,13 +48,10 @@ public class ApplicationContext extends FileSystemXmlApplicationContext implemen
         Object object = null;
         Class<?> aClass = null;
         Set<Map.Entry<String, GenericBeanDefinition>> entries = subMap.entrySet();
-
         // 判断容器中是否存在beanId
         if (subMap.containsKey(beanId)) {
-
             // 如果存在。开始遍历每一个bean
             for (Map.Entry<String, GenericBeanDefinition> entry : entries) {
-
                 // 如果beanId在容器中找到了
                 if (beanId.equals(entry.getKey())) {
 
@@ -100,7 +98,6 @@ public class ApplicationContext extends FileSystemXmlApplicationContext implemen
                                 }
                             }
                             object = consValue(aClass, constructorChildBeanDefinition, object);
-
                             break;
                         }
                     }
@@ -157,7 +154,7 @@ public class ApplicationContext extends FileSystemXmlApplicationContext implemen
 
 
     /**
-     * set注入
+     * set注入:掉set方法注入 invoke
      *
      * @param aClass
      * @param childBeanDefinition

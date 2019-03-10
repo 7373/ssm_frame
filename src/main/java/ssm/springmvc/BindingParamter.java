@@ -11,6 +11,7 @@ import java.lang.reflect.Parameter;
  */
 public interface BindingParamter {
 
+    /*执行方法请求，返回方法结果*/
      Object bindingParamter(Parameter parameter, HttpServletRequest request) throws IllegalAccessException, InstantiationException, NoSuchMethodException;
 
 }

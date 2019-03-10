@@ -1,6 +1,7 @@
 package ssm.springmvc;
 
 import ssm.utils.AnnotationUtils;
+import ssm.utils.ObjectUtils;
 import ssm.utils.isBasicTypeUtils;
 import ssm.annotation.MyModelAttribute;
 import ssm.annotation.MyRequstParam;
@@ -15,25 +16,28 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @ClassName Binding
+ * @ClassName Binding：controller方法中绑定请求参数
  * @Description
  * @Data 2018/12/6
  * @Author Yien
  */
 public class Binding {
 
-    public static  List<Object> bingdingMethodParamters(Map<String, Method> bindingRequestMapping, HttpServletRequest request) {
-        List<Object> resultParameters  = new ArrayList<>();
-        Set<Map.Entry<String, Method>> entries = bindingRequestMapping.entrySet();
-        for (Map.Entry<String, Method> entry :
-                entries) {
+    /**
+     * bingdingMethodParamters :获取请求中发参数
+     * @when
+     */
+    public static List<Object> bingdingMethodParamters(Map<String, Method> requestMappingMap, HttpServletRequest request) {
+        List<Object> resultParameters = new ArrayList<>();
+        Set<Map.Entry<String, Method>> entries = requestMappingMap.entrySet();
+        for (Map.Entry<String, Method> entry : entries) {
             Method method = entry.getValue();
             Parameter[] parameters = method.getParameters();
 
             //pan kong
             for (Parameter parameter :
                     parameters) {
-                if (!AnnotationUtils.isEmpty(parameter.getAnnotations())){
+                if (ObjectUtils.isNotEmpty(parameter.getAnnotations())) {
                     Object resultParameter = null;
                     try {
                         resultParameter = bingdingEachParamter(parameter, request);
@@ -54,35 +58,31 @@ public class Binding {
         return resultParameters;
     }
 
+
     private static Object bingdingEachParamter(Parameter parameter, HttpServletRequest request) throws IllegalAccessException, NoSuchMethodException, InstantiationException {
 
-      //这里有问题
-        if (!AnnotationUtils.isEmpty(parameter.getAnnotation(MyRequstParam.class))){
+        //这里有问题
+        if (ObjectUtils.isNotEmpty(parameter.getAnnotation(MyRequstParam.class))) {
             BindingParamter bindingParamter = new BindingByMyRequstParam();
             Object resultParameter = bindingParamter.bindingParamter(parameter, request);
             return resultParameter;
-        }
-
-        else if (!AnnotationUtils.isEmpty(parameter.getAnnotation(MyModelAttribute.class))){
+        } else if (ObjectUtils.isNotEmpty(parameter.getAnnotation(MyModelAttribute.class))) {
             BindingParamter bindingParamter = new BindingByMyModelAttribute();
-            Object resultParameter = bindingParamter.bindingParamter(parameter,request);
+            Object resultParameter = bindingParamter.bindingParamter(parameter, request);
             return resultParameter;
-        }
-        else if(parameter.getAnnotations() == null || parameter.getAnnotations().length ==0){
+        } else if (parameter.getAnnotations() == null || parameter.getAnnotations().length == 0) {
             boolean flag = isBasicTypeUtils.isBasicType(parameter.getType().getSimpleName());
-            if (flag){
+            if (flag) {
                 BindingParamter bindingParamter = new BindingByMyRequstParam();
                 Object resultParameter = bindingParamter.bindingParamter(parameter, request);
                 return resultParameter;
-            }
-            else{
+            } else {
                 BindingParamter bindingParamter = new BindingByMyModelAttribute();
-                Object resultParameter = bindingParamter.bindingParamter(parameter,request);
+                Object resultParameter = bindingParamter.bindingParamter(parameter, request);
                 return resultParameter;
             }
         }
         return null;
-
     }
 
 }

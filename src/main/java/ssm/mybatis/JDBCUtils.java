@@ -19,7 +19,7 @@ public class JDBCUtils {
     //    private  String driver="com.mysql.jdbc.Driver";
 //    private  String url="jdbc:mysql://localhost:3306/test";
 //    private  String user="root";
-//    private  String password="qinliang";
+//    private  String password="";
     private static final String url = "jdbc:postgresql://localhost:5433/test?useUnicode=true&characterEncoding=utf-8"
             + "?useUnicode=true&characterEncoding=utf8";//防止中文读取乱码
     private static final String user = "postgres";
